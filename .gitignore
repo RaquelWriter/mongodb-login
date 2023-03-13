@@ -1,5 +1,5 @@
 node_modules/
-atlas_uri.js
+.atlas_uri.js
 
 # macOS
 .DS_Store

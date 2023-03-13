@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb'); // import the MongoClient
-const uri = require('./atlas_uri'); // import the url string for the connection
+const uri = require('./.atlas_uri'); // import the url string for the connection
 /*
  atlas_uri will contain:
  change <myDBUser> and <password> for your dbUser and DB password
