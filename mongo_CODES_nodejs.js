@@ -1,31 +1,13 @@
-const { MongoClient } = require('mongodb'); // import the MongoClient
-const uri = require('./.atlas_uri'); // import the url string for the connection
 /*
- atlas_uri will contain:
- change <myDBUser> and <password> for your dbUser and DB password
-module.exports = uri =
-  'mongodb+srv://<myDBUser>:<password>@myatlasclusteredu.waapigk.mongodb.net/?retryWrites=true&w=majority';
-*/
-console.log(uri);
+ *******************************
+ *********** Samples ***********
+ *******************************
+ */
 
-// Using the MongoClient to initiate the mongo connection to the DB
-
-const client = new MongoClient(uri);
-
-const dbname = 'myAtlasClusterEDU';
-
-const connectToDatabase = async () => {
-  try {
-    await client.connect();
-    console.log(`Connected to the ${dbname} database`);
-  } catch (err) {
-    console.error(`Error connecting to the database ${dbname}: ${err} `);
-  }
-};
-connectToDatabase();
-
-/* 
-SAMPLE FOR insertOne()
+/*
+ *******************************
+ ******* insertOne() ***********
+ *******************************
 
 const dbname = 'bank';
 const collection_name = 'accounts';
@@ -52,9 +34,13 @@ const main = async () => {
   }
 };
 
-main(); */
+main();
+*/
 
-/* SAMPLE FOR findMany()
+/*
+ *******************************
+ ******* findMany() ***********
+ *******************************
 
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
@@ -103,7 +89,10 @@ const main = async () => {
 main();
 */
 
-/* SAMPLE FOR updateOne()
+/*
+ *******************************
+ ******* updateOne() ***********
+ *******************************
 
 // Require MongoDB language driver
 const { MongoClient, ObjectId } = require("mongodb");
@@ -156,7 +145,11 @@ main()
 
 */
 
-/* SAMPLE Of updateMany()
+/*
+ *******************************
+ ******* updateMany() **********
+ *******************************
+
 
 // Require MongoDB language driver
 const { MongoClient } = require("mongodb")
@@ -204,7 +197,11 @@ main()
 
 */
 
-/* SAMPLE of deleteOne()
+/*
+ *******************************
+ ******* deleteOne() ***********
+ *******************************
+
 
 Using deleteOne()
 To delete a single document from a collection, use the deleteOne() method on a collection object. This method accepts a query filter that matches the document that you want to delete. If you do not specify a filter, MongoDB matches and deletes the first document in the collection. Here's an example:
@@ -230,38 +227,72 @@ const main = async () => {
   }
 }
 
-main()
-
-Using deleteMany()
-You can delete multiple documents from a collection in a single operation by calling the deleteMany() method on a collection object. To specify which documents to delete, pass a query filter that matches the documents that you want to delete. If you provide an empty document, MongoDB matches all documents in the collection and deletes them. In the following example, we delete all accounts with a balance of less than 500 by using a query filter. Then, we print the total number of deleted documents.
-
-const dbname = "bank"
-const collection_name = "accounts"
-
-const accountsCollection = client.db(dbname).collection(collection_name)
-
-const documentsToDelete = { balance: { $lt: 500 } }
-
-const main = async () => {
- try {
-   await connectToDatabase()
-   let result = await accountsCollection.deleteMany(documentsToDelete)
-   result.deletedCount > 0
-     ? console.log(`Deleted ${result.deletedCount} documents`)
-     : console.log("No documents deleted")
- } catch (err) {
-   console.error(`Error deleting documents: ${err}`)
- } finally {
-   await client.close()
- }
-}
- 
 main()
 
 */
 
-/* Sample of deleteMany()
+/*
+ *******************************
+ ******* deleteMany() **********
+ *******************************
+
+Using deleteMany()
 // Be careful deleteMany() will delete ALL documents
+You can delete multiple documents from a collection in a single operation by calling the deleteMany() method on a collection object. To specify which documents to delete, pass a query filter that matches the documents that you want to delete. If you provide an empty document, MongoDB matches all documents in the collection and deletes them. In the following example, we delete all accounts with a balance of less than 500 by using a query filter. Then, we print the total number of deleted documents.
+
+const dbname = "bank"
+const collection_name = "accounts"
+
+const accountsCollection = client.db(dbname).collection(collection_name)
+
+const documentsToDelete = { balance: { $lt: 500 } }
+
+const main = async () => {
+ try {
+   await connectToDatabase()
+   let result = await accountsCollection.deleteMany(documentsToDelete)
+   result.deletedCount > 0
+     ? console.log(`Deleted ${result.deletedCount} documents`)
+     : console.log("No documents deleted")
+ } catch (err) {
+   console.error(`Error deleting documents: ${err}`)
+ } finally {
+   await client.close()
+ }
+}
+ 
+main()
+*/
+
+/*
+Using deleteMany()
+You can delete multiple documents from a collection in a single operation by calling the deleteMany() method on a collection object. To specify which documents to delete, pass a query filter that matches the documents that you want to delete. If you provide an empty document, MongoDB matches all documents in the collection and deletes them. In the following example, we delete all accounts with a balance of less than 500 by using a query filter. Then, we print the total number of deleted documents.
+
+const dbname = "bank"
+const collection_name = "accounts"
+
+const accountsCollection = client.db(dbname).collection(collection_name)
+
+const documentsToDelete = { balance: { $lt: 500 } }
+
+const main = async () => {
+ try {
+   await connectToDatabase()
+   let result = await accountsCollection.deleteMany(documentsToDelete)
+   result.deletedCount > 0
+     ? console.log(`Deleted ${result.deletedCount} documents`)
+     : console.log("No documents deleted")
+ } catch (err) {
+   console.error(`Error deleting documents: ${err}`)
+ } finally {
+   await client.close()
+ }
+}
+ 
+main()
+*/
+
+/* Sample of deleteMany()
 
 Using deleteOne()
 To delete a single document from a collection, use the deleteOne() method on a collection object. This method accepts a query filter that matches the document that you want to delete. If you do not specify a filter, MongoDB matches and deletes the first document in the collection. Here's an example:
@@ -289,29 +320,130 @@ const main = async () => {
 
 main()
 
-Using deleteMany()
-You can delete multiple documents from a collection in a single operation by calling the deleteMany() method on a collection object. To specify which documents to delete, pass a query filter that matches the documents that you want to delete. If you provide an empty document, MongoDB matches all documents in the collection and deletes them. In the following example, we delete all accounts with a balance of less than 500 by using a query filter. Then, we print the total number of deleted documents.
+/*
+ *******************************
+ ******* TRANSACTIONS **********
+ *******************************
 
-const dbname = "bank"
-const collection_name = "accounts"
+ // In MongoDB, a transaction is an operation
+ that groups a set of read and write operations into a single atomic unit
+ of work. This means that a transaction is either executed completely
+ or not at all. If any of the operations within the transaction fails,
+ all operations within the transaction are rolled back and the state
+ is restored to the state prior to the transaction.
 
-const accountsCollection = client.db(dbname).collection(collection_name)
+Transactions are commonly used to ensure that complex database operations
+are completed successfully. For example, in a banking application,
+a transaction can be used to ensure that funds transfer from one account
+to another is completed successfully, otherwise, all operations performed
+are rolled back.
 
-const documentsToDelete = { balance: { $lt: 500 } }
+************************************************************
+******* 1 - Create variables used in the transaction *******
+************************************************************
 
-const main = async () => {
- try {
-   await connectToDatabase()
-   let result = await accountsCollection.deleteMany(documentsToDelete)
-   result.deletedCount > 0
-     ? console.log(`Deleted ${result.deletedCount} documents`)
-     : console.log("No documents deleted")
- } catch (err) {
-   console.error(`Error deleting documents: ${err}`)
- } finally {
-   await client.close()
- }
+// Collections
+const accounts = client.db("bank").collection("accounts")
+const transfers = client.db("bank").collection("transfers")
+
+// Account information
+let account_id_sender = "MDB574189300"
+let account_id_receiver = "MDB343652528"
+let transaction_amount = 100
+
+************************************************************
+******* 2 - Start a new session ********************+*******
+************************************************************
+
+const session = client.startSession()
+
+************************************************************
+******* 3 - Begin a transaction with the WithTransaction() *
+******* method on the session.  ********************+*******
+************************************************************
+
+const transactionResults = await session.withTransaction(async () => {
+  // Operations will go here
 }
- 
-main()
+
+************************************************************
+4 - Update the balance field of the sender’s account
+by decrementing the transaction_amount from the balance field.
+************************************************************
+
+const senderUpdate = await accounts.updateOne(
+  { account_id: account_id_sender },
+  { $inc: { balance: -transaction_amount } },
+  { session }
+)
+************************************************************
+5 - Update the balance field of the receiver’s account by
+incrementing the transaction_amount to the balance field.
+************************************************************
+
+const receiverUpdate = await accounts.updateOne(
+  { account_id: account_id_receiver },
+  { $inc: { balance: transaction_amount } },
+  { session }
+)
+************************************************************
+6 - Create a transfer document and insert it into the 
+transfers collection.
+************************************************************
+
+const transfer = {
+  transfer_id: "TR21872187",
+  amount: 100,
+  from_account: account_id_sender,
+  to_account: account_id_receiver,
+}
+
+const insertTransferResults = await transfers.insertOne(transfer, { session })
+
+************************************************************
+7 - Update the transfers_complete array of the sender’s
+account by adding the transfer_id to the array.
+************************************************************
+
+const updateSenderTransferResults = await accounts.updateOne(
+  { account_id: account_id_sender },
+  { $push: { transfers_complete: transfer.transfer_id } },
+  { session }
+)
+************************************************************
+8 - Update the transfers_complete  array of the receiver’s
+account by adding the transfer_id  to the array.
+************************************************************
+
+const updateReceiverTransferResults = await accounts.updateOne(
+  { account_id: account_id_receiver },
+  { $push: { transfers_complete: transfer.transfer_id } },
+  { session }
+)
+
+*********************************************************************
+9 - Log a message regarding the success or failure of the transaction
+*********************************************************************
+
+if (transactionResults) {
+  console.log("Transaction completed successfully.")
+} else {
+  console.log("Transaction failed.")
+}
+
+
+*********************************************************************
+10 - Catch any errors and close the session
+*********************************************************************
+
+} catch (err) {
+  console.error(`Transaction aborted: ${err}`)
+  process.exit(1)
+} finally {
+  await session.endSession()
+  await client.close()
+}
+
+
+
 */
