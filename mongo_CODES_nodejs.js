@@ -319,6 +319,7 @@ const main = async () => {
 }
 
 main()
+*/
 
 /*
  *******************************
@@ -436,6 +437,11 @@ if (transactionResults) {
 10 - Catch any errors and close the session
 *********************************************************************
 
+/*
+ *******************************
+ ******* insertOne() ***********
+ *******************************
+
 } catch (err) {
   console.error(`Transaction aborted: ${err}`)
   process.exit(1)
@@ -444,6 +450,52 @@ if (transactionResults) {
   await client.close()
 }
 
+The following aggregation pipeline finds the documents with a field named "state" that matches a value "CA" and then groups those documents by the group key "$city" and shows the total number of zip codes in the state of California.
+db.zips.aggregate([
+{   
+   $match: { 
+      state: "CA"
+    }
+},
+{
+   $group: {
+      _id: "$city",
+      totalZips: { $count : { } }
+   }
+}
+])
+*/
+/*
+ *******************************
+ ******* aggregate() ***********
+ *******************************
 
+db.sightings.aggregate([
+  {
+    $match: {
+      species_common: 'Eastern Bluebird',
+    },
+  },
+  {
+    $group: {
+      _id: '$location.coordinates',
+      number_of_sightings: { $count: {} },
+    },
+  },
+]);
 
+// The following aggregation pipeline sorts the documents in descending order, so the documents with the greatest 
+// pop value appear first, and limits the output to only the first five documents after sorting.
+
+/*
+db.zips.aggregate([
+  {
+    $sort: {
+      pop: -1,
+    },
+  },
+  {
+    $limit: 5,
+  },
+]);
 */
