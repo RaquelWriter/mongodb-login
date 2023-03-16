@@ -499,3 +499,118 @@ db.zips.aggregate([
   },
 ]);
 */
+
+/*
+The data:
+{
+  _id: ObjectId("62e2d811b1d5bc85b6e04013"),
+  species_common: 'Northern Cardinal',
+  species_scientific: 'Cardinalis Cardinalis',
+  date: ISODate("2022-01-18T05:30:40.000Z"),
+  location: { type: 'Point', coordinates: [ 41, -74 ] }
+}
+*/
+/*
+We want to use this data to find the birds that are sighted furthest North.
+Use a $sort stage to sort the data from North to South. To do this,
+use "location.latitude", where the highest latitude value is the furthest
+North.
+
+db.sightings.aggregate([
+  {
+    $sort: {'location.coordinates[1]': -1} // coordinates: [longitude, latitude] descending order
+  },
+  {$limit: 4}
+]);
+*/
+
+/*
+ *******************************
+ ******* aggregate() ***********
+ *******************************
+ ********** $project ***********
+ *******************************
+
+ project can be used to create or change the value of fields,
+ but it can also be used to specify which fields to show in the documents in the aggregation pipeline.
+Determines output shape, similar to find, should be the last stage to format
+the output
+Can be inclusion (value 1) and exclusion (value 0)
+
+{
+  $project: {
+    state:1, 
+    zip:1,
+    population:"$pop",
+    _id:0
+  }
+}
+// another example:
+ db.sightings.aggregate(
+  {
+    $project:{date:1, species_common:1, _id:0}
+  }
+ )
+
+// Another example:
+ 
+Create a stage that finds matches where species_common
+is "Eastern Bluebird" and where the date field is a value
+between January 1, 2022 0:00, and January 1, 2023 0:00.
+And count the results.
+
+db.sightings.aggregate([
+  {
+    $match: {
+      date: {
+        $gt: ISODate('2022-01-01T00:00:00.0Z'),
+        $lt: ISODate('2023-01-01T00:00:00.0Z'),
+      },
+      species_common: 'Eastern Bluebird',
+    },
+  },
+  {$count: "sightings"}
+]);
+
+*/
+
+/*
+ *******************************
+ ******* aggregate() ***********
+ *******************************
+ ************** $set ***********
+ *******************************
+
+ Adds of modifies fields in the pipeline
+ outputs the documents with the new fields.
+{
+  $set: {
+    place: {
+        $concat:["$city",",","$state"]
+    },
+    pop:10000
+  }
+}
+
+// Otro ejemplo:
+
+db.birds.aggregate(
+  {$set: {class: "bird"}}
+)
+
+ */
+
+/*
+ *******************************
+ ******* aggregate() ***********
+ *******************************
+ ************ $count ***********
+ *******************************
+
+ Counts documents in the pipeline and returns the total document count
+{
+  $count: "total_zips"
+}
+ // output: { total_zips: 3452 }
+
+*/
