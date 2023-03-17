@@ -470,6 +470,21 @@ db.zips.aggregate([
  ******* aggregate() ***********
  *******************************
 
+Aggregation is a way to filter, sort, group, reshape, and analyze data without
+changing any data in the collection.
+Aggregation is used to answer questions or have insight about the collection.
+
+Stages of the aggregation:
+
+$match
+$group
+$sort
+$limit
+$project
+$set
+$count
+$out
+
 db.sightings.aggregate([
   {
     $match: {
@@ -607,10 +622,153 @@ db.birds.aggregate(
  ************ $count ***********
  *******************************
 
- Counts documents in the pipeline and returns the total document count
+ Counts documents in the pipeline and returns the total document count.
+ Output: A single document with one field that contains the value set
+ to the number of documents at this stage in the aggregation pipeline.
 {
   $count: "total_zips"
 }
  // output: { total_zips: 3452 }
 
 */
+
+/*
+ *******************************
+ ******* aggregate() ***********
+ *******************************
+ ************ $out *************
+ *******************************
+
+Writes the document that are returned by an aggregation pipeline
+into a collection.
+It has to be the last stage in the pipeline.
+Creates a new collection if the collection doesn't exist, but
+if the collection exists $out replaces the existing collection
+with new data.
+
+db.sightings.aggregate([
+  {
+    $match: {
+      date: {
+        $gte: ISODate('2022-01-01T00:00:00.0Z'),
+        $lt: ISODate('2023-01-01T00:00:00.0Z'),
+      },
+    },
+  },
+  {$out: "sightings_2022"}
+]);
+
+ */
+
+/*
+ *******************************
+ ************ INDEXES **********
+ *******************************
+
+They are special structures that store ordered small portion of the data
+that allows an easy and efficient search (speed up queries, reduces disk I/O,
+reduce resources required), but at the cost of write performance.
+Indexes point to the document identity.
+There is only one index by default in each collection: _id
+Every query should use an index.
+If we insert or update documents, we need to update the index data structure also.
+If we have many indexes per collection, the performance degrade.
+Be sure the indexes are used, and delete the unnecesary or redundant ones.
+
+Types of indexes:
+-single field
+-compound field
+
+Both can be multikey indexes, that it's an index on an array field
+
+**** Single field index ****
+A single field index is an index on a single
+field of a document. MongoDB creates a single field index on the _id field
+by default, but additional indexes may be needed for other fields as well.
+A single field index can also be a multikey index if it operates on an array
+field.
+
+**** Compound index ****
+MongoDB supports compound indexes,
+where a single index structure holds references to multiple
+fields within a collection's documents. A compound index is created
+by specifying the fields that the index should reference,
+followed by the order in which the fields should be sorted.
+The order of the fields in the index is important because it determines
+the order in which the documents are returned when querying the collection.
+A compound index can also be a multikey index if one of the fields is an array.
+
+*******************************
+************ INDEXES **********
+*******************************
+****** createIndex() **********
+*******************************
+
+createIndex({fieldname: 1}) // 1 for ascending, returns fieldname_1
+Use createIndex() to create a new index in a collection.
+Within the parentheses of createIndex(), include an object that contains
+the field and sort order.
+
+db.customers.createIndex({
+  birthdate: 1
+})
+
+Create a Unique Single Field Index
+Add {unique:true} as a second, optional, parameter in createIndex()
+to force uniqueness in the index field values. Once the unique index
+is created, any inserts or updates including duplicated values in the
+collection for the index field/s will fail.
+MongoDB only creates the unique index if there is no duplication
+in the field values for the index field/s.
+
+db.customers.createIndex({
+  email: 1
+},
+{
+  unique:true
+})
+
+db.customers.insertOne({email: "james@gmail.com"}) // if it exists already
+it will give a duplicate key error.
+
+*******************************
+************ INDEXES **********
+*******************************
+******* getIndexes() **********
+*******************************
+
+db.customers.getIndexes() // return all the indexes
+
+*******************************
+************ INDEXES **********
+*******************************
+********** explain() **********
+*******************************
+
+To check if an index is used in a query and see the execution plan:
+db.customers.explain().find({birthdate: {$gt: ISODate("1995-08-01")}})
+
+Use explain() in a collection when running a query to see the Execution plan.
+This plan provides the details of the execution stages:
+(IXSCAN , COLLSCAN, FETCH, SORT, etc.).
+
+** The IXSCAN stage indicates the query is using an index and what index is being selected.
+** The COLLSCAN stage indicates a collection scan is perform, not using any indexes.
+** The FETCH stage indicates documents are being read from the collection.
+** The SORT stage indicates documents are being sorted in memory.
+
+db.customers.explain().find({
+  birthdate: {
+    $gt:ISODate("1995-08-01")
+    }
+})
+
+db.customers.explain().find({
+  birthdate: {
+    $gt:ISODate("1995-08-01")
+    }
+  }).sort({
+    email:1
+})
+
+ */
