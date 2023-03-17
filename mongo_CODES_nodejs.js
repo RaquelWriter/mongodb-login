@@ -737,7 +737,11 @@ it will give a duplicate key error.
 ******* getIndexes() **********
 *******************************
 
-db.customers.getIndexes() // return all the indexes
+db.transfers.getIndexes() // return all the indexes
+// example of return, return and array with only one index:
+// every index will be in an array:
+
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
 
 *******************************
 ************ INDEXES **********
